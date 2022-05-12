@@ -1,7 +1,15 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void main() => runApp(const MaterialApp(home: Calc()));
+void main() => runApp(MaterialApp(
+      home: const Calc(),
+      theme: ThemeData(useMaterial3: true),
+    ));
+
+final Uri _url = Uri.parse(
+    'https://www.ebay.de/help/selling/fees-credits-invoices/gebhren-fr-private-verkufer?id=4822');
 
 class Calc extends StatefulWidget {
   const Calc({Key? key}) : super(key: key);
@@ -126,12 +134,16 @@ class _CalcState extends State<Calc> {
           Card(
               elevation: 3,
               child: ListTile(
-                  leading: const Icon(Icons.help),
-                  title: const Text('Weitere Informationen'),
-                  subtitle: const Text(
-                      'Diese App ist nur für Personen entwickelt, die die neue Zahlungsabwicklung von eBay nutzen. Weitere Informationen zur Berechnung der Gebühren finden Sie im Kundenservice-Portal von eBay. Tippe auf diese Kachel um zu dieser Website zu gelangen.'),
-                  onTap: () => launch(
-                      'https://www.ebay.de/help/selling/fees-credits-invoices/gebhren-fr-private-verkufer?id=4822')))
+                leading: const Icon(Icons.help),
+                title: const Text('Weitere Informationen'),
+                subtitle: const Text(
+                    'Diese App ist nur für Personen entwickelt, die die neue Zahlungsabwicklung von eBay nutzen. Weitere Informationen zur Berechnung der Gebühren finden Sie im Kundenservice-Portal von eBay. Tippe auf diese Kachel um zu dieser Website zu gelangen.'),
+                onTap: () => _launchUrl,
+              ))
         ])));
   }
+}
+
+void _launchUrl() async {
+  if (!await launchUrl(_url)) throw 'Could not launch $_url';
 }
