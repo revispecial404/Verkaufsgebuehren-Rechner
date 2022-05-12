@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,9 +7,6 @@ void main() => runApp(MaterialApp(
       home: const Calc(),
       theme: ThemeData(useMaterial3: true),
     ));
-
-final Uri _url = Uri.parse(
-    'https://www.ebay.de/help/selling/fees-credits-invoices/gebhren-fr-private-verkufer?id=4822');
 
 class Calc extends StatefulWidget {
   const Calc({Key? key}) : super(key: key);
@@ -91,7 +88,10 @@ class _CalcState extends State<Calc> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Verkaufsgebühren - Rechner'),
+          title: const Text(
+            'Verkaufsgebühren - Rechner',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         body: Center(
             child: ListView(padding: const EdgeInsets.all(8), children: [
@@ -110,11 +110,18 @@ class _CalcState extends State<Calc> {
             controller: second,
           ),
           const SizedBox(height: 30),
-          ElevatedButton(onPressed: calculation, child: const Text("Berechne")),
-          const SizedBox(height: 15),
-          ElevatedButton(
-              onPressed: calculationminus,
-              child: const Text("Berechne mit abgezogenen Versandkosten")),
+          Row(children: <Widget>[
+            Expanded(
+              child: ElevatedButton(
+                  onPressed: calculation, child: const Text("Berechne")),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                  onPressed: calculationminus,
+                  child: const Text("Berechne mit abgezogenen Versandkosten")),
+            )
+          ]),
           const SizedBox(height: 30),
           Text(
             "Sie erhalten: $ergebnis €",
@@ -131,19 +138,16 @@ class _CalcState extends State<Calc> {
                   'Diese App dient nur zu Informationszwecken. Wir garantieren nicht die Genauigkeit der Angaben. "Verkaufsgebühren - Rechner" wird in keiner Weise von eBay unterstützt, sondern von einem unabhängigen Entwickler gepflegt.'),
             ),
           ),
+          const SizedBox(height: 5),
           Card(
               elevation: 3,
               child: ListTile(
-                leading: const Icon(Icons.help),
-                title: const Text('Weitere Informationen'),
-                subtitle: const Text(
-                    'Diese App ist nur für Personen entwickelt, die die neue Zahlungsabwicklung von eBay nutzen. Weitere Informationen zur Berechnung der Gebühren finden Sie im Kundenservice-Portal von eBay. Tippe auf diese Kachel um zu dieser Website zu gelangen.'),
-                onTap: () => _launchUrl,
-              ))
+                  leading: const Icon(Icons.help),
+                  title: const Text('Weitere Informationen'),
+                  subtitle: const Text(
+                      'Diese App ist nur für Personen entwickelt, die die neue Zahlungsabwicklung von eBay nutzen. Weitere Informationen zur Berechnung der Gebühren finden Sie im Kundenservice-Portal von eBay. Tippe auf diese Kachel um zu dieser Website zu gelangen.'),
+                  onTap: () => launch(
+                      'https://www.ebay.de/help/selling/fees-credits-invoices/gebhren-fr-private-verkufer?id=4822')))
         ])));
   }
-}
-
-void _launchUrl() async {
-  if (!await launchUrl(_url)) throw 'Could not launch $_url';
 }
